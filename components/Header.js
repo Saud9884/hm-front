@@ -2,9 +2,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import Center from "./Center";
 
-
-export default function Header(){
-    const StyleHeader = styled.header`
+const StyleHeader = styled.header`
     background-color: #222;
     `;
     const Logo = styled(Link)`
@@ -24,6 +22,8 @@ export default function Header(){
     color:#aaa;
     text-decoration: none;
     `;
+
+export default function Header(){
     return (
         <StyleHeader>
             <Center>
