@@ -4,7 +4,7 @@ import Link from "next/link";
 
 
 const StyledImage = styled(Image)`
-  object-fit: cover; /* This will make the image cover the container while maintaining its aspect ratio */
+  object-fit: cover;
   width: 100%;
   height: 100%;
 `;
@@ -13,9 +13,8 @@ export default function Featured() {
     <div>
       
       <Link href="/products">
-        
 
-          <StyledImage src="/banner.jpg" alt="banner" width={1270} height={321}  layout="responsive"/>
+          <StyledImage src="/banner2.jpg" alt="banner" width={1270} height={321}  layout="responsive"/>
           
           </Link>
         
