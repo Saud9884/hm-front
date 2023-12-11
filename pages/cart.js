@@ -67,6 +67,11 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
+const Gap = styled.div`
+display: flex;
+gap: 10px;
+`;
+
 export default function CartPage() {
   const { cartProducts, addProduct, removeProduct, clearCart } =
     useContext(CartContext);
@@ -79,16 +84,19 @@ export default function CartPage() {
   const [country, setCountry] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [couponCode, setCouponCode] = useState("");
+  // const [total, setTotal] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);
   useEffect(() => {
     if (cartProducts.length > 0) {
-      axios.post("/api/cart", { ids: cartProducts }).then((response) => {
-        setProducts(response.data);
-      });
+      axios.post('/api/cart', {ids:cartProducts})
+        .then(response => {
+          setProducts(response.data);
+        })
     } else {
       setProducts([]);
     }
   }, [cartProducts]);
+  
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -100,10 +108,14 @@ export default function CartPage() {
   }, []);
   function moreOfThisProduct(id) {
     addProduct(id);
+
   }
+  
   function lessOfThisProduct(id) {
     removeProduct(id);
+
   }
+  
   async function goToPayment() {
     const response = await axios.post("/api/checkout", {
       name,
@@ -112,39 +124,44 @@ export default function CartPage() {
       postalCode,
       streetAddress,
       country,
-      cartProducts,
+      products,
+    
     });
     if (response.data.url) {
+      
       window.location = response.data.url;
     }
   }
+
   let total = 0;
   for (const productId of cartProducts) {
-    const price = products.find((p) => p._id === productId)?.price || 0;
+    const price = products.find(p => p._id === productId)?.price || 0;
     total += price;
   }
 
-  function applyCouponCode() {
-    // Replace this with your actual coupon validation logic
-    const validCouponCode = "DISCOUNT10";
-
-    if (couponCode === validCouponCode) {
-      // Your logic to calculate the discount percentage
-      const discountPercentage = 10; // 10% discount for the example
-
-      // Calculate the discount amount
-      const discountAmount = (total * discountPercentage) / 100;
-
-      // Apply the discount to the total
-      total -= discountAmount;
-
-      // You can also add additional logic here, such as updating the UI or showing a message
-      console.log(`Coupon applied successfully! Discount: $${discountAmount.toFixed(2)}`);
-    } else {
-      // Invalid coupon code, you can add logic to handle this case (e.g., show an error message)
-      console.error("Invalid coupon code");
-    }
-  }
+  // function applyCouponCode() {
+  //   // Replace this with your actual coupon validation logic
+  //   const validCouponCode = "DISCOUNT10";
+  
+  //   if (couponCode === validCouponCode) {
+  //     // Your logic to calculate the discount percentage
+  //     const discountPercentage = 10; // 10% discount for the example
+  
+  //     // Calculate the discount amount
+  //     const discountAmount = (total * discountPercentage) / 100;
+  
+  //     // Apply the discount to the total using setTotal
+  //     setTotal((prevTotal) => prevTotal - discountAmount);
+  //     setCouponCode("");
+  
+  //     // You can also add additional logic here, such as updating the UI or showing a message
+  //     console.log(`Coupon applied successfully! Discount: $${discountAmount.toFixed(2)}`);
+  //   } else {
+  //     // Invalid coupon code, you can add logic to handle this case (e.g., show an error message)
+  //     console.error("Invalid coupon code");
+  //   }
+  // }
+  
 
   if (isSuccess) {
     return (
@@ -191,8 +208,9 @@ export default function CartPage() {
                             alt="Product Image"
                           />
                         </ProductImageBox>
-                        {product.title}
-                        {product.serial}
+                         {product.title.toUpperCase()}
+                         {product.serial}
+                        
                       </ProductInfoCell>
                       <td>
                         <Button onClick={() => lessOfThisProduct(product._id)}>
@@ -229,7 +247,7 @@ export default function CartPage() {
             value={couponCode}
             onChange={(ev) => setCouponCode(ev.target.value)}
           />
-          <Button black block onClick={applyCouponCode}>
+          <Button black block >
             Apply Coupon
           </Button>
           </Box>
@@ -284,12 +302,14 @@ export default function CartPage() {
                 type="text"
                 placeholder="Phone Number"
                 value={phoneNumber}
-                name="pnumber"
+                name="phoneNumber"
                 onChange={(ev) => setPhoneNumber(ev.target.value)}
               />
-              <Button black block>
+              <input type="hidden" name="products" value={cartProducts.join(',')} />              
+              <Button onClick={goToPayment} black block>
                 Continue to payment
               </Button>
+             
             </Box>
           )}
         </ColumnsWrapper>
