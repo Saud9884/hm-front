@@ -117,21 +117,22 @@ export default function CartPage() {
   }
   
   async function goToPayment() {
-    const response = await axios.post("/api/checkout", {
-      name,
-      email,
-      city,
-      postalCode,
-      streetAddress,
-      country,
-      products,
-    
-    });
-    if (response.data.url) {
+  const response = await axios.post("/api/checkout", {
+        name,
+        email,
+        city,
+        postalCode,
+        streetAddress,
+        country,
+        phoneNumber,
+        products: cartProducts,
+      });
+      if (response.data.url) {
       
-      window.location = response.data.url;
-    }
+        window.location = response.data.url;
+      }
   }
+  
 
   let total = 0;
   for (const productId of cartProducts) {
@@ -208,7 +209,7 @@ export default function CartPage() {
                             alt="Product Image"
                           />
                         </ProductImageBox>
-                         {product.title.toUpperCase()}
+                         {product.title}
                          {product.serial}
                         
                       </ProductInfoCell>
@@ -305,7 +306,7 @@ export default function CartPage() {
                 name="phoneNumber"
                 onChange={(ev) => setPhoneNumber(ev.target.value)}
               />
-              <input type="hidden" name="products" value={cartProducts.join(',')} />              
+                         
               <Button onClick={goToPayment} black block>
                 Continue to payment
               </Button>
