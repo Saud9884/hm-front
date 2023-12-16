@@ -2,6 +2,7 @@ import Button from "@/components/Button";
 import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
+import ProductImages from "@/components/ProductImage";
 import Title from "@/components/Title";
 import WhiteBox from "@/components/WhiteBox";
 import CartIcon from "@/components/icons/CartIcon";
@@ -36,10 +37,10 @@ export default function ProductPage({product}) {
       <Center>
         <ColWrapper>
           <WhiteBox>
-            images
+            <ProductImages images={product.images} />
           </WhiteBox>
           <div>
-            <Title>{product.title}</Title>
+            <Title>{product.title} {product.serial}</Title>
             <p>{product.description}</p>
             <PriceRow>
               <div>
